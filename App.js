@@ -2,7 +2,7 @@ import Animated, {
   Easing,
   Keyframe, 
 } from 'react-native-reanimated';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, View, Button } from 'react-native';
 import React, { useState} from 'react';
 
 export default function App() {
@@ -10,60 +10,48 @@ export default function App() {
 
   const enteringAnimation = new Keyframe({
     0: {
-      originX: 50,
-      transform: [{ rotate: '45deg' }],
+      height: 0,
     },
-    30: {
-      originX: 10,
-      transform: [{ rotate: '-90deg' }],
+    50: {
+      height: 500,
+      easing: Easing.linear,
     },
     100: {
-      originX: 0,
-      transform: [{ rotate: '0deg' }],
-      easing: Easing.quad,
+      height: 1000,
     },
   }).duration(2000);
 
   const exitingAnimation = new Keyframe({
     0: {
-      opacity: 1,
-      transform: [{ skewX: '0deg' }],
+      height: 1000,
     },
-    30: {
-      opacity: 0.5,
-      transform: [{ skewX: '40deg' }],
-      easing: Easing.exp,
+    50: {
+      height: 500,
+      easing: Easing.linear,
     },
     100: {
-      opacity: 0,
-      transform: [{ skewX: '-10deg' }],
-    },
+      height: 0,
+    }
   }).duration(2000);
   
   return (
-    <View style={{ flexDirection: 'column-reverse' }}>
+    <View style={styles.container}>
+      {show && 
+        <Animated.View
+          style={styles.animatedView}
+          entering={enteringAnimation}
+          exiting={exitingAnimation}
+        >
+          
+        </Animated.View>
+      }
       <Button
-        title="animate"
-        onPress={() => {
-          setShow((last) => !last);
-        }}
-      />
-      <View
-        style={{ height: 400, alignItems: 'center', justifyContent: 'center' }}>
-        {show && (
-            <Animated.View
-              entering={enteringAnimation}
-              exiting={exitingAnimation}
-              style={{
-                height: 100,
-                width: 200,
-                backgroundColor: 'blue',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            />
-        )}
-      </View>
+          title="animate"
+          style={styles.btnAnimation}
+          onPress={() => {
+            setShow((last) => !last);
+          }}
+        />
     </View>
   );
 }
@@ -74,5 +62,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    position: 'relative',
   },
+  animatedView: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'cyan',
+    justifyContent: 'center',
+    position: 'absolute',
+  },
+  btnAnimation: {
+  }, 
 });
